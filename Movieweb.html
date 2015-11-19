@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>TheMovieDB</title>
+  </head>
+  <body>
+    <h1>TheMovieDB API!</h1>
+    <span id="span_errores"></span>
+    <div class="row">
+    <span class="input-group-addon">User:</span>
+      <input class="form-control" id="input_usuario" type="text"> <span class="input-group-addon">Pass:</span>
+      <input class="form-control" id="input_password" type="text">
+    </div>
+    <div class="row">
+      <h3 class="panel-title">Buscar ID películas</h3> <input class="form-control" id="sacar_peliculas_name" type="text"><button type="button" class="btn btn-info" id="button_sacar_peliculas_por_ID">Buscar</button> <span id="span_resultado_peliculas_por_ID"></span>
+    </div> 
+    <div class="row">
+      <h1 class="panel-title">Listas</h1>
+        <button type="button" class="btn btn-info"
+        id="button_post_lista">Crear Lista</button> <span class="input-group-addon">Nombre Lista:</span>
+      <input class="form-control" id="sacar_lista_name" type="text"> <span class="input-group-addon">Descripción:</span>
+      <input class="form-control" id="sacar_descripcion_lista_name" type="text"> <span id="span_resultado_crearlista"></span> 
+    </div>
+      <div class="row">
+      <h3 class="panel-title">Añadir Película a la Lista</h3>
+        <button type="button" class="btn btn-info"
+        id="button_post_IDlista">Añadir </button> <span class="input-group-addon">ID Lista:</span>
+      <input class="form-control" id="sacar_ID_Lista" type="text"> <span class="input-group-addon">ID Película:</span>
+      <input class="form-control" id="sacar_ID_Pelicula" type="text"> <span id="span_resultado_añadir_PeliaLista"></span> 
+    </div>
+      <div class="row">
+      <h3 class="panel-title">Eliminar Película a la Lista</h3>
+        <button type="button" class="btn btn-info"
+        id="button_remove_IDlista">Eliminar </button> <span class="input-group-addon">ID Lista:</span>
+      <input class="form-control" id="sacar_ID_Lista_eliminar" type="text"> <span class="input-group-addon">ID Película:</span>
+      <input class="form-control" id="sacar_ID_Pelicula_eliminar" type="text"> <span id="span_resultado_eliminar_PeliaLista"></span> 
+    </div>
+      
+    
+    </div>
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Event and AJAX functions -->
+    <script src="weblinking.js"></script>
+    <script type="text/javascript" src="Movie.js"></script>
+  </body>
+</html>
