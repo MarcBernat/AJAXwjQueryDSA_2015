@@ -11,13 +11,14 @@
     <span class="input-group-addon">User:</span>
       <input class="form-control" id="input_usuario" type="text"> <span class="input-group-addon">Pass:</span>
       <input class="form-control" id="input_password" type="text">
+        <span id="span_userID"></span>
     </div>
     <div class="row">
       <h3 class="panel-title">Buscar ID películas</h3> <input class="form-control" id="sacar_peliculas_name" type="text"><button type="button" class="btn btn-info" id="button_sacar_peliculas_por_ID">Buscar</button> <span id="span_resultado_peliculas_por_ID"></span>
     </div> 
     <div class="row">
-      <h1 class="panel-title">Listas</h1>
-        <button type="button" class="btn btn-info"
+      <h1 class="panel-title">Listas</h1><button type="button" class="btn btn-info"
+        id="button_get_lista">Obtener Listas</button><span id="span_resultado_getlistas"></span> <button type="button" class="btn btn-info"
         id="button_post_lista">Crear Lista</button> <span class="input-group-addon">Nombre Lista:</span>
       <input class="form-control" id="sacar_lista_name" type="text"> <span class="input-group-addon">Descripción:</span>
       <input class="form-control" id="sacar_descripcion_lista_name" type="text"> <span id="span_resultado_crearlista"></span> 
