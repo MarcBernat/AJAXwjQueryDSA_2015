@@ -1,9 +1,10 @@
 var API_BASE_URL = "https://api.themoviedb.org/3/";
-var api_key = "##########"; //Poner aqui la API-Key
+var api_key = "###########";
 var request_key;
 var session_ID;
-var USERNAME;
-var PASSWORD;
+var user_ID;
+var USERNAME = "########";
+var PASSWORD = "#######";
 
 $.ajaxSetup({
     //No hay en esta APIheaders: { 'Authorization': "Basic "+ btoa(USERNAME+':'+PASSWORD) }
@@ -18,16 +19,17 @@ Details about themoviedb API
 http://docs.themoviedb.apiary.io/
 */
 
+//Clicks
 $("#button_sacar_peliculas_por_ID").click(function(e) {
 	e.preventDefault();
-	getPeliculasContienenNombre_Pag($("#sacar_peliculas_name").val(), 5);
+	getPeliculasContienenNombre($("#sacar_peliculas_name").val(), 5);
 });
 
 $("#button_post_lista").click(function(e) {
 	e.preventDefault();
     
-    USERNAME = $("#input_usuario").val();
-    PASSWORD = $("#input_password").val();
+    //USERNAME = $("#input_usuario").val();
+    //PASSWORD = $("#input_password").val();
     var name = $("#sacar_lista_name").val();
     var descrip = $("#sacar_descripcion_lista_name").val();
     var Listanueva = new Object();
@@ -46,11 +48,11 @@ $("#button_post_IDlista").click(function(e) {
     var IDPeli = $("#sacar_ID_Pelicula").val();
     
     var media = new Object();
-    Listanueva.media_id = IDPeli;
+    media.media_id = IDPeli;
     
     var data = JSON.stringify(media);
     
-    anadirLista(data, IDlista);
+    anadiraLista(data, IDlista);
 });
 
 $("#button_remove_IDlista").click(function(e) {
@@ -59,15 +61,19 @@ $("#button_remove_IDlista").click(function(e) {
     var IDPeli = $("#sacar_ID_Pelicula_eliminar").val();
     
     var media = new Object();
-    Listanueva.media_id = IDPeli;
+    media.media_id = IDPeli;
     
     var data = JSON.stringify(media);
     
     removerdeLista(data, IDlista);
 });
 
+$("#button_get_lista").click(function(e) {
+	e.preventDefault();
+    getListas();
+});
 
-
+//Peticion de Tokens/Cuentas
 function getRequestToken(){
     var url = API_BASE_URL + 'authentication/token/new?api_key=' + api_key;
     
@@ -110,11 +116,30 @@ function getSession_ID(request_key){
 		dataType : 'json',
 	}).done(function(data, status, jqxhr) {
         session_ID = data.session_id;
+        getInfoCuenta();
 
     }).fail(function() {
 				$('<div class="alert alert-danger"> <strong>Oh!</strong> Intento Fallido de Iniciar Sessión (session_id) </div>').appendTo($("#span_errores"));
 	});
 }
+function getInfoCuenta(){
+    var url = API_BASE_URL + 'account?api_key=' + api_key + '&session_id=' + session_ID;
+    $("#span_userID").text('');
+    $.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
+        user_ID = data.id;
+        $('<br><strong> User_ID: ' + data.id + '</strong><br>').appendTo($('#span_userID'));
+
+    }).fail(function() {
+				$('<div class="alert alert-danger"> <strong>Oh!</strong> Intento Fallido de Sacar Información de la Cuenta </div>').appendTo($("#span_errores"));
+	});
+    
+}
+//Búsqueda
 function getPeliculasContienenNombre(pelicula_name) {
 	var url = API_BASE_URL + 'search/movie?api_key=' + api_key + '&query=' + pelicula_name;
 	$.ajax({
@@ -141,8 +166,9 @@ function getPeliculasContienenNombre(pelicula_name) {
 	});
 
 }
+//Listas
 function crearLista(data, session_id){
-    var url = API_BASE_URL + 'list?api_key=' + api_key + '&sessionid=' + session_ID;
+    var url = API_BASE_URL + 'list?api_key=' + api_key + '&session_id=' + session_ID;
     
 	$("#span_resultado_crearlista").text('');
 
@@ -151,6 +177,7 @@ function crearLista(data, session_id){
 		type : 'POST',
 		crossDomain : true,
 		dataType : 'json',
+        contentType : 'application/json',
 		data : data,
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Hecho</strong> Lista Creada</div>').appendTo($("#span_resultado_crearlista"));				
@@ -158,8 +185,8 @@ function crearLista(data, session_id){
 		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#span_resultado_crearlista"));
 	});
 }
-function anadirLista(data, IDlista){
-    var url = API_BASE_URL + 'list/' + IDlista + '/add_item?api_key=' + api_key + '&sessionid=' + session_ID;
+function anadiraLista(data, IDlista){
+    var url = API_BASE_URL + 'list/' + IDlista + '/add_item?api_key=' + api_key + '&session_id=' + session_ID;
     
     $("#span_resultado_añadir_PeliaLista").text('');
 
@@ -168,6 +195,7 @@ function anadirLista(data, IDlista){
 		type : 'POST',
 		crossDomain : true,
 		dataType : 'json',
+        contentType : 'application/json',
 		data : data,
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Hecho</strong> Película Añadida </div>').appendTo($("#span_resultado_añadir_PeliaLista"));				
@@ -176,7 +204,7 @@ function anadirLista(data, IDlista){
 	});
 }
 function removerdeLista(data, IDlista){
-    var url = API_BASE_URL + 'list/' + IDlista + '/remove_item?api_key=' + api_key + '&sessionid=' + session_ID;
+    var url = API_BASE_URL + 'list/' + IDlista + '/remove_item?api_key=' + api_key + '&session_id=' + session_ID;
     
     $("#span_resultado_eliminar_PeliaLista").text('');
 
@@ -185,6 +213,7 @@ function removerdeLista(data, IDlista){
 		type : 'POST',
 		crossDomain : true,
 		dataType : 'json',
+        contentType : 'application/json',
 		data : data,
 	}).done(function(data, status, jqxhr) {
 		$('<div class="alert alert-success"> <strong>Hecho</strong> Película Eliminada </div>').appendTo($("#span_resultado_eliminar_PeliaLista"));				
@@ -192,7 +221,33 @@ function removerdeLista(data, IDlista){
 		$('<div class="alert alert-danger"> <strong>Oh!</strong> Error </div>').appendTo($("#span_resultado_eliminar_PeliaLista"));
 	});
 }
+function getListas(){
+    var url = API_BASE_URL + 'account/' + user_ID + '/lists?api_key=' + api_key + '&session_id=' + session_ID;
+    
+    $.ajax({
+		url : url,
+		type : 'GET',
+		crossDomain : true,
+		dataType : 'json',
+	}).done(function(data, status, jqxhr) {
 
+				var listas = data.results;
+				$("#span_resultado_getlistas").text('');
+        
+                $.each(listas, function(i, v) {
+					var lista = v;
+					$('<br><strong> Título: ' + lista.description + '</strong><br>').appendTo($('#span_resultado_getlistas'));
+					$('<strong> ID: </strong> ' + lista.id + '<br>').appendTo($('#span_resultado_getlistas'));
+				});
+
+			}).fail(function() {
+				$('<div class="alert alert-danger"> <strong>Oh!</strong> Sin Listas/Error </div>').appendTo($("#span_resultado_getlistas"));
+	});
+
+  
+}
+
+//Pruebas
 function PeliCollections(peliCollection){
 	this.pelis = peliCollection;
 	var instance = this;
